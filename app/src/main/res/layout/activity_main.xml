@@ -6,4 +6,31 @@
     android:orientation="vertical">
 
     <include layout="@layout/item_toolbar"/>
+    <android.support.design.widget.TabLayout
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent">
+
+        <android.support.design.widget.TabItem
+            android:text="现在"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"/>
+        <android.support.design.widget.TabItem
+            android:text="我"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"/>
+        <android.support.design.widget.TabItem
+            android:text="好友"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"/>
+
+
+    </android.support.design.widget.TabLayout>
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <android.support.v7.widget.RecyclerView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+        </android.support.v7.widget.RecyclerView>
+    </FrameLayout>
 </LinearLayout>
