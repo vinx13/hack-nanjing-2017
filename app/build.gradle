@@ -5,7 +5,7 @@ android {
     compileSdkVersion 25
     buildToolsVersion "25.0.1"
     defaultConfig {
-        applicationId "vincentlin.me.hacknanjing"
+        applicationId "me.hacknanjing"
         minSdkVersion 21
         targetSdkVersion 25
         versionCode 1
