@@ -106,6 +106,14 @@ def main():
 
     img_trans = cv2.warpPerspective(img1, adjust_homo, (len(img1[0]) + len(img2[0]) + 110, len(img2)))
 
+    img1_input = img_trans.copy()
+    img2_input = img2.copy()
+
+    # tf here  use img1_input & img2_input and give the mat only with people
+
+    img1_tf_output =  # TODO:
+    img2_tf_output =  # TODO:
+
     col = int(target_link_point[0] - based_image_point[0])
     img1_overlap = img_trans[0: len(img2), col:]
     img2_overlap = img2[0: len(img1_overlap), 0: len(img1_overlap[0])]
@@ -122,6 +130,18 @@ def main():
             img1_overlap[i][j][0] = get_overlap(img1_roi_copy, img2_overlap, i, j, 0, rows)
             img1_overlap[i][j][1] = get_overlap(img1_roi_copy, img2_overlap, i, j, 1, rows)
             img1_overlap[i][j][2] = get_overlap(img1_roi_copy, img2_overlap, i, j, 2, rows)
+
+    for i in range(len(img_trans)):
+        for j in range(len(img_trans[0])):
+            for k in range(3):
+                if img1_tf_output[i][j][k] != 0:
+                    img_trans[i][j][k] = img1_tf_output[i][j][k]
+
+    for i in range(len(img2)):
+        for j in range(col, col+len(img2_overlap)):
+            for k in range(3):
+                if img2_tf_output[i][j][k] != 0:
+                    img_trans[i][j][k] = img2_tf_output[i][j][k]
 
     img_trans = img_trans[0: len(img1_overlap), col: col+len(img1_overlap[0])]
     cv2.imwrite("transResult.jpg", img_trans)

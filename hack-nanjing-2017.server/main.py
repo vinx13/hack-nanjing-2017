@@ -6,15 +6,10 @@
 
 from flask import Flask, request, jsonify, send_from_directory, abort
 from config import ALLOWED_EXTENSIONS, UPLOAD_IMAGE_FOLDER
-from werkzeug import secure_filename
 import time, os
 
 app = Flask("HP")
 app.secret_key = "HackNanjing"
-
-
-def allowed_file(filename):
-    return '.' in filename and filename.rsplit('.', 1)[1] in ALLOWED_EXTENSIONS
 
 
 @app.route('/')
@@ -43,20 +38,19 @@ def main():
 
 @app.route("/uploadimage", methods=['POST'])
 def uploadimage():
-    name = request.form.get('name')
-    image = request.file('image')
-    if image and allowed_file(image):
-        filename = secure_filename(file.filename)
-        file.save(os.path.join(UPLOAD_IMAGE_FOLDER, filename))
+    file = request.files['file']
+    print file
+    if file:
+        file.save(os.path.join(UPLOAD_IMAGE_FOLDER, file.filename))
         return jsonify({"error": 0, "msg": "upload success"})
     else:
         return jsonify({"error": 1, "msg": "upload failure"})
     
 
-@app.route("/getimage/<img_name>", methods=['GET'])
-def getimage(img_name):
-    if os.path.isfile(os.path.join('upload', img_name)):
-        return send_from_directory('upload', img_name, as_attachment=True)
+@app.route("/getimage/<filename>", methods=['GET'])
+def getimage(filename):
+    if os.path.isfile(os.path.join(UPLOAD_IMAGE_FOLDER, filename)):
+        return send_from_directory(UPLOAD_IMAGE_FOLDER, filename, as_attachment=True)
     abort(404)
 
 

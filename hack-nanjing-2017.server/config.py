@@ -10,5 +10,5 @@ DATABASE_DIR = os.path.join(BASE_DIR, 'database')
 DATABASE_PATH = os.path.join(DATABASE_DIR, 'app.db')
 DATABASE_SCHEMA_PATH = os.path.join(DATABASE_DIR, 'schema.sql')
 
-UPLOAD_IMAGE_FOLDER = '/uploads/image'
+UPLOAD_IMAGE_FOLDER = 'D:\Computer Science\Github\hack-nanjing-2017\hack-nanjing-2017.server\upload'
 ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'gif'])
