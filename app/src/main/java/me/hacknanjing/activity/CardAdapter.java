@@ -47,7 +47,15 @@ public class CardAdapter extends RecyclerView.Adapter {
             tvUsername.setText(post.getUser().getUsername());
             tvContent.setText(post.getContent());
             Picasso.with(context).load(post.getUser().getAvatar()).into(ivAvatar);
-            Picasso.with(context).load(post.getImage()).resize(250,0).into(ivBody);
+            Picasso.with(context).load(post.getImage()).resize(400, 0).into(ivBody);
+
+            ivLike.setOnClickListener(v -> {
+                post.setLiked(!post.getLiked());
+                updateLike(post, context);
+            });
+        }
+
+        void updateLike(Post post, Context context) {
             Picasso.with(context).load(
                     post.getLiked() ? R.drawable.liked : R.drawable.like
             ).into(ivLike);
