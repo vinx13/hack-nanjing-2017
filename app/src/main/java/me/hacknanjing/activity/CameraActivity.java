@@ -1,39 +1,44 @@
 package me.hacknanjing.activity;
 
 import android.hardware.Camera;
-import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.SurfaceHolder;
+import android.view.SurfaceView;
 import android.view.View;
-import android.view.WindowManager;
-import android.widget.FrameLayout;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 
 import com.squareup.picasso.Picasso;
 
+import java.io.IOException;
+
 import butterknife.BindView;
 import me.hacknanjing.R;
-import me.hacknanjing.widget.CameraPreview;
 
+import static android.content.ContentValues.TAG;
 import static me.hacknanjing.util.CameraUtil.getCameraInstance;
 
 /**
  * Created by dynamicheart on 5/13/2017.
  */
 
-public class CameraActivity extends BaseActivity {
+public class CameraActivity extends BaseActivity implements SurfaceHolder.Callback {
+    @BindView(R.id.camera_preview)
+    SurfaceView svPreview;
     @BindView(R.id.origin_photo)
     ImageView originPhoto;
-    @BindView(R.id.button_capture)
-    ImageButton buttonCapture;
+    @BindView(R.id.iv_capture)
+    ImageView buttonCapture;
+
+    SurfaceHolder svHolder;
 
     @Override
     protected int getContentViewId() {
         return R.layout.activity_camera;
     }
 
-    private Camera mCamera;
-    private CameraPreview mPreview;
+    private Camera camera;
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -43,19 +48,16 @@ public class CameraActivity extends BaseActivity {
         int uiOptions = View.SYSTEM_UI_FLAG_FULLSCREEN;
         decorView.setSystemUiVisibility(uiOptions);
 
-        setContentView(R.layout.activity_camera);
+
 
         Picasso.with(this).load(R.drawable.test_photo).into(originPhoto);
-        Picasso.with(this).load(R.drawable.group_photo).into(buttonCapture);
 
         // Create an instance of Camera
-        mCamera = getCameraInstance();
+        camera = getCameraInstance();
 
         // Create our Preview view and set it as the content of our activity.
-        mPreview = new CameraPreview(this, mCamera);
-        FrameLayout preview = (FrameLayout) findViewById(R.id.camera_preview);
-        preview.addView(mPreview);
-
+        svHolder = svPreview.getHolder();
+        svHolder.addCallback(this);
     }
 
     @Override
@@ -65,9 +67,54 @@ public class CameraActivity extends BaseActivity {
     }
 
     private void releaseCamera() {
-        if (mCamera != null) {
-            mCamera.release();        // release the camera for other applications
-            mCamera = null;
+        if (camera != null) {
+            camera.release();        // release the camera for other applications
+            camera = null;
         }
     }
+
+    public void surfaceCreated(SurfaceHolder holder) {
+        // The Surface has been created, now tell the camera where to draw the preview.
+        try {
+            camera.setPreviewDisplay(holder);
+            camera.startPreview();
+        } catch (IOException e) {
+            Log.d(TAG, "Error setting camera preview: " + e.getMessage());
+        }
+    }
+
+    public void surfaceDestroyed(SurfaceHolder holder) {
+        // empty. Take care of releasing the Camera preview in your activity.
+    }
+
+    public void surfaceChanged(SurfaceHolder holder, int format, int w, int h) {
+        // If your preview can change or rotate, take care of those events here.
+        // Make sure to stop the preview before resizing or reformatting it.
+
+        if (svHolder.getSurface() == null){
+            // preview surface does not exist
+            return;
+        }
+
+        // stop preview before making changes
+        try {
+            camera.stopPreview();
+        } catch (Exception e){
+            // ignore: tried to stop a non-existent preview
+        }
+
+        // set preview size and make any resize, rotate or
+        // reformatting changes here
+
+        // start preview with new settings
+        try {
+            camera.setPreviewDisplay(svHolder);
+            camera.startPreview();
+
+        } catch (Exception e){
+            Log.d(TAG, "Error starting camera preview: " + e.getMessage());
+        }
+    }
+
+
 }

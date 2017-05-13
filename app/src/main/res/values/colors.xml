@@ -21,7 +21,7 @@
     <color name="colorDropDownMenuTextSelected">#ff5722</color>
     <color name="colorDropDownMenuTextUnselected">#3E3E3E</color>
     <color name="colorDropDownMenuMask">#88888888</color>
-    <color name="backgroundTransparent">#8000</color>
+    <color name="backgroundTransparent">#0000</color>
     <color name="color_border">#d8d8d8</color>
     <color name="buttonText">#727272</color>
     <color name="tab_title">#d8d8d8</color>
