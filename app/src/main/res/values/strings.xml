@@ -1,4 +1,7 @@
 <resources>
     <string name="app_name">HackNanjing</string>
     <string name="title_activity_main">MainActivity</string>
+    <string name="tab_title_me">我</string>
+    <string name="tab_title_now">现在</string>
+    <string name="tab_title_friends">好友</string>
 </resources>
