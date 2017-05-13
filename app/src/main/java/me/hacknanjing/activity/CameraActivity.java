@@ -12,11 +12,20 @@ import android.widget.ImageView;
 
 import com.squareup.picasso.Picasso;
 
+import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
 import butterknife.BindView;
 import me.hacknanjing.R;
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
 
 import static android.content.ContentValues.TAG;
 import static me.hacknanjing.util.CameraUtil.getCameraInstance;
@@ -54,7 +63,7 @@ public class CameraActivity extends BaseActivity implements SurfaceHolder.Callba
         int uiOptions = View.SYSTEM_UI_FLAG_FULLSCREEN;
         decorView.setSystemUiVisibility(uiOptions);
 
-        if (extra_bg > 0) {
+        if (extra_bg >= 0) {
             Picasso.with(this).load(extra_bg).into(originPhoto);
             Picasso.with(this).load(R.drawable.group_photo).into(ivCamera);
         } else {
@@ -82,9 +91,43 @@ public class CameraActivity extends BaseActivity implements SurfaceHolder.Callba
 
                 Bitmap bitmap = BitmapFactory.decodeByteArray(data, 0, data.length, options);
                 try {
-                    FileOutputStream stream = new FileOutputStream(getCacheDir() + "/image.png");
+                    String filename = getCacheDir() + "/image.png";
+                    File file = new File(filename);
+                    FileOutputStream stream = new FileOutputStream(file);
                     bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
                     stream.close();
+
+                    OkHttpClient client = new OkHttpClient.Builder().build();
+                    MediaType mediaType = MediaType.parse("image/png");
+
+                    RequestBody fileBody = RequestBody.create(mediaType, file);
+
+                    RequestBody formBody = new MultipartBody.Builder()
+                            .setType(MultipartBody.FORM)
+                            .addFormDataPart("file", file.getName(), fileBody)
+                            .build();
+                    Request request =
+                            new Request.Builder()
+                                    .url("http://192.168.2.61:8080/uploadimage")
+                                    .post(formBody)
+                                    .build();
+                    Call call = client.newCall(request);
+
+                    call.enqueue(new Callback() {
+                        @Override
+                        public void onFailure(Call call, IOException e) {
+
+                            Log.e("error response",e.getMessage());
+                            e.printStackTrace();
+                        }
+
+                        @Override
+                        public void onResponse(Call call, Response response) throws IOException {
+                            String json = response.body().string();
+                            Log.d("response", json);
+                        }
+                    });
+
                 } catch (IOException e) {
                     e.printStackTrace();
                 } finally {

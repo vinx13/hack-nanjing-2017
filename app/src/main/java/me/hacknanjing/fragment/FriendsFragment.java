@@ -47,7 +47,7 @@ public class FriendsFragment extends BaseFragment {
         List<Post> posts = mockPosts();
         rvList.setHasFixedSize(true);
         rvList.setLayoutManager(new LinearLayoutManager(getContext()));
-        rvList.setAdapter(new CardAdapter(getContext(), posts));
+        rvList.setAdapter(new CardAdapter(getContext(), posts, true));
 
         return view;
     }
