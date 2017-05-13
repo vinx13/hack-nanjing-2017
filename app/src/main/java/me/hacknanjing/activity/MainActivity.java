@@ -1,26 +1,32 @@
 package me.hacknanjing.activity;
 
 import android.graphics.Color;
+
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+
+import android.support.design.widget.TabLayout;
+import android.view.View;
+import android.widget.ImageView;
+import android.widget.TextView;
+
 
 import butterknife.BindView;
-import me.hacknanjing.R;
+
 import me.hacknanjing.fragment.FriendsFragment;
 import me.hacknanjing.fragment.MeFragment;
 import me.hacknanjing.fragment.NowFragment;
-
+import me.hacknanjing.R;
 /**
  * Created by Vincent on 2017/5/13.
  */
 
 public class MainActivity extends BaseActivity {
+
     @BindView(R.id.tab_layout)
     TabLayout tabLayout;
     @BindView(R.id.container)
@@ -33,17 +39,22 @@ public class MainActivity extends BaseActivity {
         return R.layout.activity_main;
     }
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         adapter = new SectionsPagerAdapter(getSupportFragmentManager());
         viewPager.setAdapter(adapter);
+    }
+
+    private void initTabs() {
         tabLayout.setSelectedTabIndicatorColor(Color.TRANSPARENT);
 
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
                 int currentPage = tab.getPosition();
+
                 //updateToolbar(currentPage);
                 viewPager.setCurrentItem(tab.getPosition(), false);
             }
@@ -61,7 +72,7 @@ public class MainActivity extends BaseActivity {
     }
 
 
-    public class SectionsPagerAdapter extends FragmentStatePagerAdapter {
+    class SectionsPagerAdapter extends FragmentStatePagerAdapter {
 
         final int PageCount = 3;
 
@@ -88,5 +99,4 @@ public class MainActivity extends BaseActivity {
             return PageCount;
         }
     }
-
 }
