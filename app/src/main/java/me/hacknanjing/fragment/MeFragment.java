@@ -1,5 +1,6 @@
 package me.hacknanjing.fragment;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Point;
 import android.os.Bundle;
@@ -42,14 +43,18 @@ import butterknife.BindView;
 
 import butterknife.ButterKnife;
 import me.hacknanjing.R;
+import me.hacknanjing.activity.DetailActivity;
 import me.hacknanjing.api.model.Post;
 import me.hacknanjing.util.Factory;
+
+import static me.hacknanjing.activity.DetailActivity.EXTRA_IS_FRIENDS;
+import static me.hacknanjing.activity.DetailActivity.EXTRA_POST_INDEX;
 
 /**
  * Created by Vincent on 2017/5/13.
  */
 
-public class MeFragment extends BaseFragment {
+public class MeFragment extends BaseFragment implements AMap.OnMarkerClickListener {
     @BindView(R.id.map)
     MapView mapView = null;
 
@@ -99,10 +104,24 @@ public class MeFragment extends BaseFragment {
         mapView.onSaveInstanceState(outState);
     }
 
-    public void initMap() {
+    @Override
+    public boolean onMarkerClick(final Marker marker) {
+        Post post = (Post)marker.getObject();
+        int index = mockPosts().indexOf(post);
+        Intent intent = new Intent(getContext(), DetailActivity.class);
+        intent.putExtra(EXTRA_POST_INDEX, index);
+        intent.putExtra(EXTRA_IS_FRIENDS, false);
+        startActivity(intent);
+        return true;
+    }
+
+    public void initMap(){
         if (aMap == null) {
             aMap = mapView.getMap();
             addMarkersToMap();
+            changeCamera(
+                    CameraUpdateFactory.newCameraPosition(new CameraPosition(
+                            new LatLng(32.012354, 119.106243), 10, 30, 30)));
         }
     }
 
@@ -120,14 +139,12 @@ public class MeFragment extends BaseFragment {
      */
     private void addMarkersToMap() {
         List<Post> posts = mockPosts();
-        Log.d("Length", ((Integer) posts.size()).toString());
-        for (Post post : posts) {
-
+        for(Post post:posts){
             MarkerOptions markerOption = new MarkerOptions().icon(BitmapDescriptorFactory
                     .defaultMarker(BitmapDescriptorFactory.HUE_AZURE))
                     .position(post.getPosition())
                     .draggable(true);
-            aMap.addMarker(markerOption);
+            aMap.addMarker(markerOption).setObject(post);
         }
     }
 
