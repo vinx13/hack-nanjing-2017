@@ -45,6 +45,7 @@ public class MainActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         adapter = new SectionsPagerAdapter(getSupportFragmentManager());
         viewPager.setAdapter(adapter);
+        initTabs();
     }
 
     private void initTabs() {
