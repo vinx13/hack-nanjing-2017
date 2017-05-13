@@ -6,7 +6,7 @@ import tensorflow as tf
 label_colours = [(0,0,0)
                 # 0=background
                 ,(128,0,0),(0,128,0),(128,128,0),(0,0,128),(128,0,128)
-                # 1=aeroplane, 2=bicycle, 3=bird, 4=boat, 5=bottle
+                # 1=aeroplane, 2=bicycle, 3=bird, /4=boat, 5=bottle
                 ,(0,128,128),(128,128,128),(64,0,0),(192,0,0),(64,128,0)
                 # 6=bus, 7=car, 8=cat, 9=chair, 10=cow
                 ,(192,128,0),(64,0,128),(192,0,128),(64,128,128),(192,128,128)

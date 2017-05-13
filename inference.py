@@ -16,23 +16,28 @@ from PIL import Image
 import tensorflow as tf
 import numpy as np
 
-from deeplab_resnet import DeepLabResNetModel, ImageReader, decode_labels, prepare_label
+from deeplab_resnet import DeepLabResNetModel, ImageReader, prepare_label
 
-IMG_MEAN = np.array((104.00698793,116.66876762,122.67891434), dtype=np.float32)
-    
+IMG_MEAN = np.array((104.00698793, 116.66876762, 122.67891434), dtype=np.float32)
+
 NUM_CLASSES = 21
-SAVE_DIR = './output/'
+SAVE_DIR = './'
+INPUT_HEIGHT=300
+INPUT_WEIGHT=300
+
+
+
 
 def get_arguments():
     """Parse all the arguments provided from the CLI.
-    
+
     Returns:
       A list of parsed arguments.
     """
     parser = argparse.ArgumentParser(description="DeepLabLFOV Network Inference.")
-    parser.add_argument("img_path", type=str,
+    parser.add_argument("img_path", type=str, default='~/Documents/IMG_0396.JPG',
                         help="Path to the RGB image file.")
-    parser.add_argument("model_weights", type=str,
+    parser.add_argument("model_weights", type=str, default='~/deeplab_resnet.ckpt',
                         help="Path to the file with model weights.")
     parser.add_argument("--num-classes", type=int, default=NUM_CLASSES,
                         help="Number of classes to predict (including background).")
@@ -40,14 +45,15 @@ def get_arguments():
                         help="Where to save predicted mask.")
     return parser.parse_args()
 
+
 def load(saver, sess, ckpt_path):
     '''Load trained weights.
-    
+
     Args:
       saver: TensorFlow saver object.
       sess: TensorFlow session.
       ckpt_path: path to checkpoint file with parameters.
-    ''' 
+    '''
     saver.restore(sess, ckpt_path)
     print("Restored model parameters from {}".format(ckpt_path))
 
@@ -57,14 +63,17 @@ def main():
     
     # Prepare image.
     img = tf.image.decode_jpeg(tf.read_file(args.img_path), channels=3)
+    tf.image.resize_images(img,(INPUT_HEIGHT,INPUT_WEIGHT))
     # Convert RGB to BGR.
     img_r, img_g, img_b = tf.split(axis=2, num_or_size_splits=3, value=img)
     img = tf.cast(tf.concat(axis=2, values=[img_b, img_g, img_r]), dtype=tf.float32)
     # Extract mean.
     img -= IMG_MEAN 
-    
+    img =  tf.expand_dims(img, dim=0)
+
     # Create network.
-    net = DeepLabResNetModel({'data': tf.expand_dims(img, dim=0)}, is_training=False, num_classes=args.num_classes)
+    data_pl=tf.placeholder(tf.float32, shape=(1,INPUT_HEIGHT,INPUT_WEIGHT,3))
+    net = DeepLabResNetModel({'data': data_pl}, is_training=False, num_classes=args.num_classes)
 
     # Which variables to load.
     restore_var = tf.global_variables()
@@ -81,24 +90,19 @@ def main():
     config.gpu_options.allow_growth = True
     sess = tf.Session(config=config)
     init = tf.global_variables_initializer()
-    
-    sess.run(init)
+
+    feed_dict={data_pl:img}
+    sess.run(init, feed_dict=feed_dict)
     
     # Load weights.
     loader = tf.train.Saver(var_list=restore_var)
     load(loader, sess, args.model_weights)
-    
+
     # Perform inference.
     preds = sess.run(pred)
-    
-    msk = decode_labels(preds, num_classes=args.num_classes)
-    im = Image.fromarray(msk[0])
-    if not os.path.exists(args.save_dir):
-        os.makedirs(args.save_dir)
-    im.save(args.save_dir + 'mask.png')
-    
-    print('The output file has been saved to {}'.format(args.save_dir + 'mask.png'))
+    pred = preds[0]
+    mask = pred[:,:,0] != 15
 
-    
+
 if __name__ == '__main__':
     main()
