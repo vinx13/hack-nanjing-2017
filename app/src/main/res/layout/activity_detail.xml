@@ -4,7 +4,7 @@
               android:layout_width="match_parent"
               android:layout_height="match_parent"
               android:orientation="vertical"
-              android:background="@color/backgroundTransparent">
+              android:background="@color/black">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -30,9 +30,10 @@
         <ImageView
             android:id="@+id/iv_body"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:scaleType="fitCenter"
-            tools:src="@drawable/p1"/>
+            tools:src="@drawable/p1"
+            android:adjustViewBounds="true"/>
 
         <ImageView
             android:id="@+id/iv_camera"

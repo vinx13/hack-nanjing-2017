@@ -10,6 +10,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
+import android.view.MenuItem;
 
 
 import butterknife.BindView;
@@ -45,11 +46,14 @@ public class MainActivity extends BaseActivity {
         adapter = new SectionsPagerAdapter(getSupportFragmentManager());
         viewPager.setAdapter(adapter);
         initTabs();
-        toolbar.setNavigationIcon(R.drawable.message);
-        toolbar.setNavigationOnClickListener(v -> {
+
+        MenuItem menu = toolbar.getMenu().add(null);
+        menu.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
+        menu.setIcon(R.drawable.message);
+        menu.setOnMenuItemClickListener((MenuItem menuItem) -> {
             Intent intent = new Intent(this, MessageActivity.class);
             startActivity(intent);
-
+            return false;
         });
     }
 
