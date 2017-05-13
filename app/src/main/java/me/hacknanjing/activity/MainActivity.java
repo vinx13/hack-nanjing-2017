@@ -9,11 +9,21 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 
+
 import android.support.design.widget.TabLayout;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+
+import butterknife.BindView;
+import me.hacknanjing.R;
+import me.hacknanjing.fragment.FriendsFragment;
+import me.hacknanjing.fragment.MeFragment;
+import me.hacknanjing.fragment.NowFragment;
 
 import butterknife.BindView;
 
@@ -21,12 +31,12 @@ import me.hacknanjing.fragment.FriendsFragment;
 import me.hacknanjing.fragment.MeFragment;
 import me.hacknanjing.fragment.NowFragment;
 import me.hacknanjing.R;
+
 /**
  * Created by Vincent on 2017/5/13.
  */
 
 public class MainActivity extends BaseActivity {
-
     @BindView(R.id.tab_layout)
     TabLayout tabLayout;
     @BindView(R.id.container)
@@ -38,7 +48,6 @@ public class MainActivity extends BaseActivity {
     protected int getContentViewId() {
         return R.layout.activity_main;
     }
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,7 +82,7 @@ public class MainActivity extends BaseActivity {
     }
 
 
-    class SectionsPagerAdapter extends FragmentStatePagerAdapter {
+    public class SectionsPagerAdapter extends FragmentStatePagerAdapter {
 
         final int PageCount = 3;
 

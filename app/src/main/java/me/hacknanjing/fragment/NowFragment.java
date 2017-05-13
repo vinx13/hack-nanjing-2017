@@ -1,5 +1,6 @@
 package me.hacknanjing.fragment;
 
+import android.support.v7.widget.RecyclerView;
 import android.content.Intent;
 import android.graphics.Camera;
 import android.os.Bundle;
@@ -22,12 +23,21 @@ import me.hacknanjing.activity.CardAdapter;
 import me.hacknanjing.api.model.Post;
 import me.hacknanjing.util.Factory;
 
+import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+
+import butterknife.ButterKnife;
+import me.hacknanjing.R;
+
+
 /**
  * Created by Vincent on 2017/5/13.
  */
 
 public class NowFragment extends BaseFragment {
-
     @BindView(R.id.rv_list)
     RecyclerView rvList;
     @BindView(R.id.iv_camera)
@@ -46,6 +56,7 @@ public class NowFragment extends BaseFragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_now, container, false);
         ButterKnife.bind(this, view);
+
 
         List<Post> posts = mockPosts();
         //rvList.setHasFixedSize(true);

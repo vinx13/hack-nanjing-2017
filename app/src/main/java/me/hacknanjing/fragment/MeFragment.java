@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+
 import com.amap.api.maps2d.AMap;
 import com.amap.api.maps2d.MapView;
 
@@ -13,6 +14,7 @@ import java.io.FileDescriptor;
 import java.io.PrintWriter;
 
 import butterknife.BindView;
+
 import butterknife.ButterKnife;
 import me.hacknanjing.R;
 
@@ -39,8 +41,9 @@ public class MeFragment extends BaseFragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_me, container, false);
         ButterKnife.bind(this, view);
+
         mapView.onCreate(savedInstanceState);
-        if(aMap == null){
+        if (aMap == null) {
             aMap = mapView.getMap();
         }
         return view;
