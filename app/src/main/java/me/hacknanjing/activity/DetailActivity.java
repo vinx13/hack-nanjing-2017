@@ -34,7 +34,7 @@ public class DetailActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         index = getIntent().getIntExtra(EXTRA_POST_INDEX, 0);
-        boolean is_friends = getIntent().getBooleanExtra(EXTRA_POST_INDEX, true);
+        boolean is_friends = getIntent().getBooleanExtra(EXTRA_IS_FRIENDS, true);
         if (is_friends) {
             post = Factory.getInstance().getAllFriendPosts().get(index);
         } else {

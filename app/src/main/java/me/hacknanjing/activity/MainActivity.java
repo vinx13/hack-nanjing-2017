@@ -1,5 +1,6 @@
 package me.hacknanjing.activity;
 
+import android.content.Intent;
 import android.graphics.Color;
 
 import android.os.Bundle;
@@ -8,6 +9,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.support.v7.widget.Toolbar;
 
 
 import butterknife.BindView;
@@ -15,7 +17,6 @@ import me.hacknanjing.R;
 import me.hacknanjing.fragment.FriendsFragment;
 import me.hacknanjing.fragment.MeFragment;
 import me.hacknanjing.fragment.NowFragment;
-
 
 
 /**
@@ -27,6 +28,9 @@ public class MainActivity extends BaseActivity {
     TabLayout tabLayout;
     @BindView(R.id.container)
     ViewPager viewPager;
+
+    @BindView(R.id.toolbar)
+    Toolbar toolbar;
 
     SectionsPagerAdapter adapter;
 
@@ -41,6 +45,12 @@ public class MainActivity extends BaseActivity {
         adapter = new SectionsPagerAdapter(getSupportFragmentManager());
         viewPager.setAdapter(adapter);
         initTabs();
+        toolbar.setNavigationIcon(R.drawable.message);
+        toolbar.setNavigationOnClickListener(v -> {
+            Intent intent = new Intent(this, MessageActivity.class);
+            startActivity(intent);
+
+        });
     }
 
     private void initTabs() {

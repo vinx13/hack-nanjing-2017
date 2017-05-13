@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.SystemClock;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -48,7 +49,7 @@ import me.hacknanjing.util.Factory;
  * Created by Vincent on 2017/5/13.
  */
 
-public class MeFragment extends BaseFragment{
+public class MeFragment extends BaseFragment {
     @BindView(R.id.map)
     MapView mapView = null;
 
@@ -98,7 +99,7 @@ public class MeFragment extends BaseFragment{
         mapView.onSaveInstanceState(outState);
     }
 
-    public void initMap(){
+    public void initMap() {
         if (aMap == null) {
             aMap = mapView.getMap();
             addMarkersToMap();
@@ -119,8 +120,8 @@ public class MeFragment extends BaseFragment{
      */
     private void addMarkersToMap() {
         List<Post> posts = mockPosts();
-        Log.d("Length",((Integer)posts.size()).toString());
-        for(Post post:posts){
+        Log.d("Length", ((Integer) posts.size()).toString());
+        for (Post post : posts) {
 
             MarkerOptions markerOption = new MarkerOptions().icon(BitmapDescriptorFactory
                     .defaultMarker(BitmapDescriptorFactory.HUE_AZURE))

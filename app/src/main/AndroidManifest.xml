@@ -51,6 +51,12 @@
             android:screenOrientation="portrait">
             <!-- configure this activity to use landscape orientation -->
         </activity>
+        <activity android:name=".activity.DetailActivity"
+                  android:screenOrientation="portrait"/>
+        <activity android:name=".activity.EditActivity"
+                  android:screenOrientation="portrait"/>
+        <activity android:name=".activity.MessageActivity"
+                  android:screenOrientation="portrait"/>
     </application>
 
 </manifest>
