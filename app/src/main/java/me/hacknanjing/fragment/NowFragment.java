@@ -2,10 +2,12 @@ package me.hacknanjing.fragment;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import me.hacknanjing.R;
 
@@ -14,6 +16,11 @@ import me.hacknanjing.R;
  */
 
 public class NowFragment extends BaseFragment {
+
+    @BindView(R.id.rv_list)
+    RecyclerView rvList;
+
+
     public static NowFragment newInstance() {
 
         Bundle args = new Bundle();
@@ -29,4 +36,5 @@ public class NowFragment extends BaseFragment {
         ButterKnife.bind(this, view);
         return view;
     }
+
 }
