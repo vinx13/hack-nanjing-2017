@@ -37,6 +37,9 @@ public class CameraActivity extends BaseActivity implements SurfaceHolder.Callba
 
     SurfaceHolder svHolder;
 
+    final public static String EXTRA_BG = "EXTRA_BG";
+    int extra_bg;
+
     @Override
     protected int getContentViewId() {
         return R.layout.activity_camera;
@@ -48,14 +51,14 @@ public class CameraActivity extends BaseActivity implements SurfaceHolder.Callba
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        extra_bg = getIntent().getIntExtra(EXTRA_BG, -1);
         View decorView = getWindow().getDecorView();
         int uiOptions = View.SYSTEM_UI_FLAG_FULLSCREEN;
         decorView.setSystemUiVisibility(uiOptions);
 
-
-        Picasso.with(this).load(R.drawable.test_photo).into(originPhoto);
-
+        if (extra_bg > 0) {
+            Picasso.with(this).load(extra_bg).into(originPhoto);
+        }
         camera = getCameraInstance();
        /* camera.autoFocus(new Camera.AutoFocusCallback() {
             @Override
@@ -83,7 +86,7 @@ public class CameraActivity extends BaseActivity implements SurfaceHolder.Callba
                     stream.close();
                 } catch (IOException e) {
                     e.printStackTrace();
-                }finally {
+                } finally {
                     finish();
                 }
             });
