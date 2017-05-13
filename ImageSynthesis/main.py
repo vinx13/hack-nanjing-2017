@@ -3,7 +3,7 @@
 # @Create Date: 2017/5/14
 
 import cv2, numpy
-
+import config
 
 def get_transform_point(original_point, transform_matrix):
     original_point_list = numpy.array([[original_point[0]], [original_point[1]], [1.0]])
@@ -69,8 +69,8 @@ def draw_key_point(img1, img2, kp_pairs):
 
 
 def main():
-    img1 = cv2.imread("3.jpg", cv2.IMREAD_COLOR)
-    img2 = cv2.imread("4.jpg", cv2.IMREAD_COLOR)
+    img1 = cv2.imread(config.UPLOAD_IMAGE_FOLDER+"/origin.png", cv2.IMREAD_COLOR)
+    img2 = cv2.imread(config.UPLOAD_IMAGE_FOLDER+"/Users/Vincent/upload/new.png", cv2.IMREAD_COLOR)
     gray1 = cv2.cvtColor(img1, cv2.COLOR_BGR2GRAY);
     gray2 = cv2.cvtColor(img2, cv2.COLOR_BGR2GRAY);
 
@@ -111,8 +111,8 @@ def main():
 
     # tf here  use img1_input & img2_input and give the mat only with people
 
-    img1_tf_output =  # TODO:
-    img2_tf_output =  # TODO:
+    img1_tf_output =  None# TODO:
+    img2_tf_output =  None# TODO:
 
     col = int(target_link_point[0] - based_image_point[0])
     img1_overlap = img_trans[0: len(img2), col:]

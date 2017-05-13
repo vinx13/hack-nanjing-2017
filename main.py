@@ -7,8 +7,12 @@
 from flask import Flask, request, jsonify, send_from_directory, abort
 from config import UPLOAD_IMAGE_FOLDER
 import time, os
+from tf import inference
+import ImageSynthesis
+
 
 app = Flask("HP")
+inference.create_sesssion()
 app.secret_key = "HackNanjing"
 
 
@@ -37,10 +41,14 @@ def main():
 
 @app.route("/uploadimage", methods=['POST'])
 def uploadimage():
-    file = request.files['file']
-    print file
-    if file:
-        file.save(os.path.join(UPLOAD_IMAGE_FOLDER, file.filename))
+    print request.files
+    file_new = request.files.get('new')
+    file_origin = request.files.get('origin')
+    print file_new, file_origin
+    if file_new and file_origin:
+        file_new.save(os.path.join(UPLOAD_IMAGE_FOLDER, file_new.filename))
+        file_origin.save(os.path.join(UPLOAD_IMAGE_FOLDER, file_origin.filename))
+        ImageSynthesis.main.main()
         return jsonify({"error": 0, "msg": "upload success"})
     else:
         return jsonify({"error": 1, "msg": "upload failure"})
