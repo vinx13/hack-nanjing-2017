@@ -12,15 +12,16 @@ import me.hacknanjing.R;
  * Created by Vincent on 2017/5/14.
  */
 
-public class EditActivity extends BaseActivity{
+public class EditActivity extends BaseActivity {
     final public static String EXTRA_IMAGE = "EXTRA_IMAGE";
-@BindView(R.id.iv_body)
-ImageView ivBody;
+    @BindView(R.id.iv_body)
+    ImageView ivBody;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         String url = getIntent().getStringExtra(EXTRA_IMAGE);
-        if(url!=null) {
+        if (url != null) {
             Picasso.with(this).load(url).into(ivBody);
         }
     }

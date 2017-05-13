@@ -2,6 +2,7 @@ package me.hacknanjing.activity;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.Drawable;
 import android.hardware.Camera;
 import android.os.Bundle;
 import android.util.Log;
@@ -11,6 +12,7 @@ import android.view.View;
 import android.widget.ImageView;
 
 import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Transformation;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -64,7 +66,11 @@ public class CameraActivity extends BaseActivity implements SurfaceHolder.Callba
         decorView.setSystemUiVisibility(uiOptions);
 
         if (extra_bg >= 0) {
-            Picasso.with(this).load(extra_bg).into(originPhoto);
+            Bitmap background = BitmapFactory.decodeResource(getResources(), extra_bg);
+            int width = background.getWidth(), height = background.getHeight();
+            background.recycle();
+            Picasso.with(this).load(extra_bg).rotate(width > height ? 90 : 0).into(originPhoto);
+
             Picasso.with(this).load(R.drawable.group_photo).into(ivCamera);
         } else {
             Picasso.with(this).load(R.drawable.camera).into(ivCamera);
