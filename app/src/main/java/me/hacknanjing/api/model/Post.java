@@ -1,5 +1,7 @@
 package me.hacknanjing.api.model;
 
+import com.amap.api.maps2d.model.LatLng;
+
 /**
  * Created by Vincent on 2017/5/13.
  */
@@ -9,12 +11,15 @@ public class Post {
     int image;
     Boolean liked;
     String content;
+    LatLng position;
 
-    public Post(User user, int image, String content) {
+
+    public Post(User user, int image, String content, LatLng position) {
         this.user = user;
         this.image = image;
         this.content = content;
         this.liked = false;
+        this.position = position;
     }
 
     public User getUser() {
@@ -47,5 +52,13 @@ public class Post {
 
     public void setContent(String content) {
         this.content = content;
+    }
+
+    public LatLng getPosition() {
+        return position;
+    }
+
+    public void setPosition(LatLng position) {
+        this.position = position;
     }
 }
