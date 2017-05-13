@@ -5,7 +5,9 @@ import android.hardware.camera2.CameraAccessException;
 import android.hardware.camera2.CameraDevice;
 import android.os.Bundle;
 import android.widget.ImageView;
+import android.widget.TextView;
 
+import com.amap.api.maps2d.model.Text;
 import com.squareup.picasso.Picasso;
 
 import butterknife.BindView;
@@ -28,6 +30,8 @@ public class DetailActivity extends BaseActivity {
     ImageView ivCamera;
     @BindView(R.id.iv_body)
     ImageView ivBody;
+    @BindView(R.id.tv_username)
+    TextView tvUsername;
     Post post;
 
     @Override
@@ -47,6 +51,7 @@ public class DetailActivity extends BaseActivity {
             intent.putExtra(CameraActivity.EXTRA_BG, post.getImage());
             startActivity(intent);
         });
+        tvUsername.setText(post.getUser().getUsername());
     }
 
     @Override

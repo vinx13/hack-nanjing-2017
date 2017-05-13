@@ -12,9 +12,7 @@ import android.widget.ImageView;
 
 import com.squareup.picasso.Picasso;
 
-import java.io.File;
 import java.io.FileOutputStream;
-import java.io.FileWriter;
 import java.io.IOException;
 
 import butterknife.BindView;
@@ -32,8 +30,8 @@ public class CameraActivity extends BaseActivity implements SurfaceHolder.Callba
     SurfaceView svPreview;
     @BindView(R.id.origin_photo)
     ImageView originPhoto;
-    @BindView(R.id.iv_capture)
-    ImageView ivCapture;
+    @BindView(R.id.iv_camera)
+    ImageView ivCamera;
 
     SurfaceHolder svHolder;
 
@@ -58,6 +56,9 @@ public class CameraActivity extends BaseActivity implements SurfaceHolder.Callba
 
         if (extra_bg > 0) {
             Picasso.with(this).load(extra_bg).into(originPhoto);
+            Picasso.with(this).load(R.drawable.group_photo).into(ivCamera);
+        } else {
+            Picasso.with(this).load(R.drawable.camera).into(ivCamera);
         }
         camera = getCameraInstance();
        /* camera.autoFocus(new Camera.AutoFocusCallback() {
@@ -72,7 +73,7 @@ public class CameraActivity extends BaseActivity implements SurfaceHolder.Callba
         svHolder = svPreview.getHolder();
         svHolder.addCallback(this);
 
-        ivCapture.setOnClickListener(v -> {
+        ivCamera.setOnClickListener(v -> {
             camera.takePicture(null, null, (data, camera1) -> {
                 BitmapFactory.Options options = new BitmapFactory.Options();
                 options.outHeight = 640;

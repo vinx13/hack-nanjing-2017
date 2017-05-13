@@ -3,29 +3,30 @@
               xmlns:tools="http://schemas.android.com/tools"
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
+              android:background="@drawable/shape_border_top_bottom"
               android:orientation="vertical">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="6dp"
-        android:orientation="horizontal"
         android:layout_gravity="left"
-        android:gravity="left">
+        android:layout_margin="6dp"
+        android:gravity="left"
+        android:orientation="horizontal">
 
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/iv_avatar"
-            android:layout_height="30dp"
             android:layout_width="30dp"
+            android:layout_height="30dp"
             tools:background="@color/colorAccent"
             tools:src="@drawable/av1">
         </de.hdodenhof.circleimageview.CircleImageView>
 
         <TextView
             android:id="@+id/tv_username"
-            android:layout_marginLeft="12dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="12dp"
             android:text="heihei"
             android:textSize="18sp"
             tools:text="用户名"/>

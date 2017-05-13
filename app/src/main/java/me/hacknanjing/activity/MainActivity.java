@@ -58,7 +58,7 @@ public class MainActivity extends BaseActivity {
     }
 
     private void initTabs() {
-        tabLayout.setSelectedTabIndicatorColor(Color.TRANSPARENT);
+        tabLayout.setSelectedTabIndicatorColor(getResources().getColor(R.color.colorPrimary));
 
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
