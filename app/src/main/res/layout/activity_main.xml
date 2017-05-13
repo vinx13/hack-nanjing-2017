@@ -16,17 +16,17 @@
         <android.support.design.widget.TabItem
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="我"/>
+            android:text="ME"/>
 
         <android.support.design.widget.TabItem
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="现在"/>
+            android:text="HERE"/>
 
         <android.support.design.widget.TabItem
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="好友"/>
+            android:text="FRIENDS"/>
 
 
     </android.support.design.widget.TabLayout>

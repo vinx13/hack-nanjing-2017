@@ -12,9 +12,9 @@ import android.widget.ImageView;
 
 import com.squareup.picasso.Picasso;
 
-import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
 
 import butterknife.BindView;
@@ -56,25 +56,35 @@ public class CameraActivity extends BaseActivity implements SurfaceHolder.Callba
 
         Picasso.with(this).load(R.drawable.test_photo).into(originPhoto);
 
-        // Create an instance of Camera
         camera = getCameraInstance();
+       /* camera.autoFocus(new Camera.AutoFocusCallback() {
+            @Override
+            public void onAutoFocus(boolean success, Camera camera) {
+                Camera.Parameters parameters = camera.getParameters();
+                camera.setParameters(parameters);
+            }
+        });*/
 
         // Create our Preview view and set it as the content of our activity.
         svHolder = svPreview.getHolder();
         svHolder.addCallback(this);
 
         ivCapture.setOnClickListener(v -> {
-            camera.takePicture(null, null, new Camera.PictureCallback() {
-                @Override
-                public void onPictureTaken(byte[] data, Camera camera) {
-                    Bitmap bitmap = BitmapFactory.decodeByteArray(data, 0, data.length);
-                    try {
-                        FileOutputStream stream = new FileOutputStream(getCacheDir() + "/image.png");
-                        bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
-                        stream.close();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
+            camera.takePicture(null, null, (data, camera1) -> {
+                BitmapFactory.Options options = new BitmapFactory.Options();
+                options.outHeight = 640;
+                options.inSampleSize = 5;
+                BitmapFactory.decodeByteArray(data, 0, data.length, options);
+
+                Bitmap bitmap = BitmapFactory.decodeByteArray(data, 0, data.length, options);
+                try {
+                    FileOutputStream stream = new FileOutputStream(getCacheDir() + "/image.png");
+                    bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
+                    stream.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }finally {
+                    finish();
                 }
             });
         });

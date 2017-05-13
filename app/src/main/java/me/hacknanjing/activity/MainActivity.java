@@ -10,27 +10,13 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 
 
-import android.support.design.widget.TabLayout;
-import android.view.View;
-import android.widget.ImageView;
-import android.widget.TextView;
-
-
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-
 import butterknife.BindView;
 import me.hacknanjing.R;
 import me.hacknanjing.fragment.FriendsFragment;
 import me.hacknanjing.fragment.MeFragment;
 import me.hacknanjing.fragment.NowFragment;
 
-import butterknife.BindView;
 
-import me.hacknanjing.fragment.FriendsFragment;
-import me.hacknanjing.fragment.MeFragment;
-import me.hacknanjing.fragment.NowFragment;
-import me.hacknanjing.R;
 
 /**
  * Created by Vincent on 2017/5/13.
@@ -95,10 +81,10 @@ public class MainActivity extends BaseActivity {
             switch (position) {
                 case 0:
                     return MeFragment.newInstance();
-                case 2:
-                    return FriendsFragment.newInstance();
                 case 1:
                     return NowFragment.newInstance();
+                case 2:
+                    return FriendsFragment.newInstance();
                 default:
                     return null;
             }

@@ -29,11 +29,11 @@ public class FriendsFragment extends BaseFragment {
     RecyclerView rvList;
 
 
-    public static NowFragment newInstance() {
+    public static FriendsFragment newInstance() {
 
         Bundle args = new Bundle();
 
-        NowFragment fragment = new NowFragment();
+        FriendsFragment fragment = new FriendsFragment();
         fragment.setArguments(args);
         return fragment;
     }
@@ -45,7 +45,7 @@ public class FriendsFragment extends BaseFragment {
 
 
         List<Post> posts = mockPosts();
-        //rvList.setHasFixedSize(true);
+        rvList.setHasFixedSize(true);
         rvList.setLayoutManager(new LinearLayoutManager(getContext()));
         rvList.setAdapter(new CardAdapter(getContext(), posts));
 
