@@ -5,7 +5,7 @@
 # @Last Modified time: 2017-04-19 10:10:13
 
 from flask import Flask, request, jsonify, send_from_directory, abort
-from config import ALLOWED_EXTENSIONS, UPLOAD_IMAGE_FOLDER
+from config import UPLOAD_IMAGE_FOLDER
 import time, os
 
 app = Flask("HP")
@@ -29,7 +29,6 @@ def main():
                 font-size:20px;
                 text-align: right;
             }
-
         </style>
         <h1>合<br>拍</h1>
         <p>%s</p>
@@ -45,7 +44,7 @@ def uploadimage():
         return jsonify({"error": 0, "msg": "upload success"})
     else:
         return jsonify({"error": 1, "msg": "upload failure"})
-    
+
 
 @app.route("/getimage/<filename>", methods=['GET'])
 def getimage(filename):
