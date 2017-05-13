@@ -2,18 +2,20 @@ package me.hacknanjing.api.model;
 
 import com.google.gson.annotations.SerializedName;
 
+import me.hacknanjing.R;
+
 /**
  * Created by Vincent on 2017/1/16.
  */
 
 public class User {
-    @SerializedName("uid")
-    private String uid;
 
-private String username;
+    private String username;
+    private int avatar;
 
-    public void setUid(String uid) {
-        this.uid = uid;
+    public User(String username, int avatar) {
+        this.username = username;
+        this.avatar = avatar;
     }
 
     public String getUsername() {
@@ -24,8 +26,13 @@ private String username;
         this.username = username;
     }
 
-    public String getUid() {
-        return uid;
+
+    public int getAvatar() {
+
+        return avatar;
     }
 
+    public void setAvatar(int avatar) {
+        this.avatar = avatar;
+    }
 }

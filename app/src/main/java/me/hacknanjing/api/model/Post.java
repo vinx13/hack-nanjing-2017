@@ -6,9 +6,16 @@ package me.hacknanjing.api.model;
 
 public class Post {
     User user;
-    String image;
+    int image;
     Boolean liked;
     String content;
+
+    public Post(User user, int image, String content) {
+        this.user = user;
+        this.image = image;
+        this.content = content;
+        this.liked = false;
+    }
 
     public User getUser() {
         return user;
@@ -18,11 +25,11 @@ public class Post {
         this.user = user;
     }
 
-    public String getImage() {
+    public int getImage() {
         return image;
     }
 
-    public void setImage(String image) {
+    public void setImage(int image) {
         this.image = image;
     }
 

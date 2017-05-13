@@ -2,14 +2,22 @@ package me.hacknanjing.fragment;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import me.hacknanjing.R;
+import me.hacknanjing.activity.CardAdapter;
+import me.hacknanjing.api.model.Post;
+import me.hacknanjing.api.model.User;
+import me.hacknanjing.util.Factory;
 
 /**
  * Created by Vincent on 2017/5/13.
@@ -34,7 +42,17 @@ public class NowFragment extends BaseFragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_now, container, false);
         ButterKnife.bind(this, view);
+
+        List<Post> posts = mockPosts();
+        //rvList.setHasFixedSize(true);
+        rvList.setLayoutManager(new LinearLayoutManager(getContext()));
+        rvList.setAdapter(new CardAdapter(getContext(), posts));
+
         return view;
+    }
+
+    private List<Post> mockPosts() {
+        return Factory.getInstance().getAllPosts();
     }
 
 }
