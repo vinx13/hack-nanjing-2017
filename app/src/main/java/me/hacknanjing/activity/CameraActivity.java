@@ -1,9 +1,15 @@
 package me.hacknanjing.activity;
 
 import android.hardware.Camera;
+import android.os.Build;
 import android.os.Bundle;
+import android.view.View;
+import android.view.WindowManager;
 import android.widget.FrameLayout;
+import android.widget.ImageButton;
 import android.widget.ImageView;
+
+import com.squareup.picasso.Picasso;
 
 import butterknife.BindView;
 import me.hacknanjing.R;
@@ -18,6 +24,8 @@ import static me.hacknanjing.util.CameraUtil.getCameraInstance;
 public class CameraActivity extends BaseActivity {
     @BindView(R.id.origin_photo)
     ImageView originPhoto;
+    @BindView(R.id.button_capture)
+    ImageButton buttonCapture;
 
     @Override
     protected int getContentViewId() {
@@ -30,8 +38,22 @@ public class CameraActivity extends BaseActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        // the status bar.
+        if (Build.VERSION.SDK_INT < 16) {
+            getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                    WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        }
+        else{
+            View decorView = getWindow().getDecorView();
+            int uiOptions = View.SYSTEM_UI_FLAG_FULLSCREEN;
+            decorView.setSystemUiVisibility(uiOptions);
+        }
+
         setContentView(R.layout.activity_camera);
 
+        Picasso.with(this).load(R.drawable.test_photo).into(originPhoto);
+        Picasso.with(this).load(R.drawable.group_photo).into(buttonCapture);
 
         // Create an instance of Camera
         mCamera = getCameraInstance();

@@ -71,7 +71,14 @@ dependencies {
     })
     compile 'com.android.support:support-v4:25.1.0'
     compile 'org.apmem.tools:layouts:1.10@aar'
-    compile 'com.bigkoo:pickerview:2.1.1'
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
+
+    //map
+    compile 'com.amap.api:3dmap:latest.integration'
+    compile 'com.amap.api:map2d:latest.integration'
+    compile 'com.amap.api:navi-3dmap:latest.integration'
+    compile 'com.amap.api:search:latest.integration'
+    compile 'com.amap.api:location:latest.integration'
+
     testCompile 'junit:junit:4.12'
 }
