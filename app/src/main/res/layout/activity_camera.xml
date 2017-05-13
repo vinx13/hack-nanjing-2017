@@ -20,15 +20,17 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_x="2dp"
+        android:layout_x="0dp"
         android:layout_y="0dp">
 
         <ImageButton
             android:id="@+id/button_capture"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:scaleType="fitCenter"
             android:layout_alignParentBottom="true"
-            android:layout_centerHorizontal="true"/>
+            android:layout_centerHorizontal="true"
+            android:src="@drawable/camera"/>
     </RelativeLayout>
 
 </AbsoluteLayout>
