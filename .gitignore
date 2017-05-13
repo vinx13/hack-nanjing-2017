@@ -60,3 +60,4 @@ gen-external-apklibs
 
 # Thumbnails
 ._*
+*.pyc
