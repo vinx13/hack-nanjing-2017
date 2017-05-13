@@ -20,6 +20,7 @@ import me.hacknanjing.util.Factory;
 
 public class DetailActivity extends BaseActivity {
     final public static String EXTRA_POST_INDEX = "EXTRA_POST_INDEX";
+    final public static String EXTRA_IS_FRIENDS = "EXTRA_IS_FRIENDS";
     int index;
     @BindView(R.id.iv_avatar)
     CircleImageView ivAvatar;
@@ -33,7 +34,12 @@ public class DetailActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         index = getIntent().getIntExtra(EXTRA_POST_INDEX, 0);
-        post = Factory.getInstance().getAllFriendPosts().get(index);
+        boolean is_friends = getIntent().getBooleanExtra(EXTRA_POST_INDEX, true);
+        if (is_friends) {
+            post = Factory.getInstance().getAllFriendPosts().get(index);
+        } else {
+            post = Factory.getInstance().getAllPosts().get(index);
+        }
         ivAvatar.setImageResource(post.getUser().getAvatar());
         ivBody.setImageResource(post.getImage());
         ivCamera.setOnClickListener(v -> {
