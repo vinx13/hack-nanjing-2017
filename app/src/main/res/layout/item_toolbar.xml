@@ -21,6 +21,5 @@
         android:layout_gravity="center"
         android:gravity="center"
         android:textColor="@color/colorTitle"
-        android:textSize="17sp"
-        tools:text="@string/toolbar_title_home"/>
+        android:textSize="17sp"/>
 </FrameLayout>

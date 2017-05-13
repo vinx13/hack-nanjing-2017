@@ -16,12 +16,12 @@
         <android.support.design.widget.TabItem
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="现在"/>
+            android:text="我"/>
 
         <android.support.design.widget.TabItem
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="我"/>
+            android:text="现在"/>
 
         <android.support.design.widget.TabItem
             android:layout_width="wrap_content"
