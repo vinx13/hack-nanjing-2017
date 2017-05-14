@@ -91,13 +91,13 @@ def main():
     img1 = cv2.imread(config.UPLOAD_IMAGE_FOLDER + "/origin.png", cv2.IMREAD_COLOR)
     img2 = cv2.imread(config.UPLOAD_IMAGE_FOLDER + "/new.png", cv2.IMREAD_COLOR)
 
-    img1 = resize(img1)
-    img2 = resize(img2)
-
     if len(img1) > len(img1[0]):
         img1 = rotate(img1)
     if len(img2) > len(img2[0]):
         img2 = rotate(img2)
+
+    img1 = resize(img1)
+    img2 = resize(img2)
 
     gray1 = cv2.cvtColor(img1, cv2.COLOR_BGR2GRAY)
     gray2 = cv2.cvtColor(img2, cv2.COLOR_BGR2GRAY)
