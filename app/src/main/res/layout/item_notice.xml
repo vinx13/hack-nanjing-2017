@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="98dp"
+    android:background="@drawable/background_message_card"
+    android:orientation="horizontal"
+    android:paddingBottom="1dp"
+    android:paddingTop="1dp"
+    android:id="@+id/message_card">
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/message_image"
+        android:layout_width="49dp"
+        android:layout_height="49dp"
+        android:layout_marginLeft="14dp"
+        android:layout_marginRight="18dp"
+        android:layout_marginTop="12dp"/>
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+        <org.apmem.tools.layouts.FlowLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="13dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/message_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:scrollHorizontally="false"
+                android:textColor="#ff5722"
+                android:textSize="12sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:ellipsize="none"
+                android:scrollHorizontally="false"
+                android:singleLine="true"
+                android:text="回复了你"
+                android:textColor="@color/black"
+                android:textSize="12sp" />
+        </org.apmem.tools.layouts.FlowLayout>
+
+        <TextView
+            android:id="@+id/message_content"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:lineSpacingMultiplier="1.2"
+            android:lines="2"
+            android:textColor="@color/black"
+            android:textSize="12sp" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="12dp"
+            android:layout_marginTop="2dp">
+
+            <TextView
+                android:id="@+id/message_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#949292"
+                android:textSize="12sp" />
+
+            <TextView
+                android:id="@+id/message_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:textColor="#949292"
+                android:textSize="12sp" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="12dp"
+        android:orientation="vertical">
+
+        <ImageView
+            android:id="@+id/message_picture"
+            android:layout_width="100dp"
+            android:layout_height="57dp"
+            android:layout_margin="1px"
+            android:scaleType="fitXY"/>
+
+        <TextView
+            android:id="@+id/message_picture_title"
+            android:layout_width="80dp"
+            android:layout_height="17dp"
+            android:layout_gravity="center"
+            android:ellipsize="end"
+            android:lines="1"
+            android:paddingLeft="5dp"
+            android:paddingTop="5dp"
+            android:textColor="@color/black"
+            android:textSize="7sp"
+            android:background="@drawable/shape_border_top"/>
+
+    </LinearLayout>
+</LinearLayout>

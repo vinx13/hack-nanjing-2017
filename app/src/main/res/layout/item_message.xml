@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LinearLayout
+    android:orientation="vertical"
+    android:paddingLeft="6.0dip"
+    android:paddingRight="6.0dip"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <LinearLayout
+        android:id="@+id/right_layout"
+        android:orientation="horizontal"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content">
+        <View style="@style/MessageSplit"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1.0" />
+        <ImageView
+            android:id="@+id/right_photo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/chatto_bg"/>
+        <TextView
+            android:autoLink="web"
+            android:id="@+id/right_message"
+            android:background="@drawable/chatto_bg"
+            style="@style/MessageText" />
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/right_avatar"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_gravity="center_vertical"
+            android:layout_margin="8dp"
+            android:src="@drawable/av1"/>
+    </LinearLayout>
+    <LinearLayout
+        android:id="@+id/left_layout"
+        android:orientation="horizontal"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content">
+        <View style="@style/MessageSplit"/>
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/left_avatar"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_gravity="center_vertical"
+            android:layout_margin="8dp"
+            android:src="@drawable/av1"/>
+        <ImageView
+            android:id="@+id/left_photo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/chatfrom_bg"/>
+        <TextView
+            android:id="@+id/left_message"
+            android:autoLink="web"
+            android:background="@drawable/chatfrom_bg"
+            style="@style/MessageText" />
+    </LinearLayout>
+</LinearLayout>

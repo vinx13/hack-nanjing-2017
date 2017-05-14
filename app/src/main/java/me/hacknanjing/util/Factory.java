@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Random;
 
 import me.hacknanjing.R;
+import me.hacknanjing.api.model.Message;
 import me.hacknanjing.api.model.Post;
 import me.hacknanjing.api.model.User;
 
@@ -19,6 +20,8 @@ public class Factory {
     ArrayList<User> users;
     ArrayList<Post> posts;
     ArrayList<Post> friendPosts;
+    ArrayList<Message> messages;
+    User me = new User("黑框眼镜修仙大侠", R.drawable.av1);
 
     private static Factory instance;
 
@@ -29,6 +32,10 @@ public class Factory {
 
     public Factory() {
         users = new ArrayList<>(7);
+        posts = new ArrayList<>(8);
+        friendPosts = new ArrayList<>(6);
+        messages = new ArrayList<>(5);
+
         users.add(new User("Jason", R.drawable.av1));
         users.add(new User("JB", R.drawable.av2));
         users.add(new User("Hsg", R.drawable.av3));
@@ -36,9 +43,6 @@ public class Factory {
         users.add(new User("马幸颖", R.drawable.av5));
         users.add(new User("Vincent", R.drawable.av6));
         users.add(new User("小姐姐", R.drawable.av7));
-        posts = new ArrayList<>(8);
-        friendPosts = new ArrayList<>(6);
-
 
         posts.add(new Post(randomUser(), R.drawable.p1, "给咱一个地铁站 法师可以玩一天", new LatLng(32.02411, 118.79087)));
         posts.add(new Post(randomUser(), R.drawable.p3, "糖果小屋", new LatLng(32.022964, 118.791986)));
@@ -55,10 +59,20 @@ public class Factory {
         friendPosts.add(new Post(randomUser(), R.drawable.fp5, "永远收不住的放荡不羁", new LatLng(32.042873, 118.763889)));
         friendPosts.add(new Post(randomUser(), R.drawable.fp6, "Hey!China!", new LatLng(32.060333, 118.599781)));
 
+        User counterpart = randomUser();
+        messages.add(new Message(counterpart, "嗨嗨嗨~~~", 0, Message.TYPE_RECEIVED, Message.CONTENT_STRING));
+        messages.add(new Message(counterpart, "看我拍了什么！", 0, Message.TYPE_RECEIVED, Message.CONTENT_STRING));
+        messages.add(new Message(counterpart, "", R.drawable.test_photo, Message.TYPE_RECEIVED, Message.CONTENT_PHOTO));
+        messages.add(new Message(me, "真有你的", 0, Message.TYPE_SENT, Message.CONTENT_STRING));
+        messages.add(new Message(me, "我有两句诗，不知当不当念？", 0, Message.TYPE_SENT, Message.CONTENT_STRING));
     }
 
     public User randomUser() {
         return randomElement(users);
+    }
+
+    public User getCurrentUser(){
+        return me;
     }
 
     public List<User> randomUsers(int n) {
@@ -93,5 +107,9 @@ public class Factory {
             subset.add(elements.get(index));
         }
         return subset;
+    }
+
+    public List<Message> getAllMessages() {
+        return messages;
     }
 }
