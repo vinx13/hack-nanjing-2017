@@ -11,7 +11,7 @@ import os
 import sys
 import time
 import numpy as np
-
+import deeplab_resnet.utils
 from PIL import Image
 
 import tensorflow as tf
@@ -51,14 +51,15 @@ def create_sesssion():
 
     # Predictions.
     raw_output = net.layers['fc1_voc12']
-    # raw_output_up = tf.image.resize_bilinear(raw_output, tf.shape(img)[0:2, ])
-    raw_output_up = tf.argmax(raw_output, dimension=3)
+    raw_output_up = tf.image.resize_bilinear(raw_output, tf.shape(data_pl)[1:3])
+    raw_output_up = tf.argmax(raw_output_up, dimension=3)
     pred = tf.expand_dims(raw_output_up, dim=3)
 
     # Set up TF session and initialize variables.
     config = tf.ConfigProto()
     config.gpu_options.allow_growth = True
     sess = tf.Session(config=config)
+
     init = tf.global_variables_initializer()
     sess.run(init)
     # Load weights.
@@ -67,7 +68,7 @@ def create_sesssion():
 
     return (sess, pred, data_pl)
 
-
+i=1
 def infer(sess, pred, img, data_pl):
     # Convert RGB to BGR.
     img_r, img_g, img_b = np.split(img, 3, axis=2)
@@ -79,8 +80,17 @@ def infer(sess, pred, img, data_pl):
 
     # Perform inference.
     preds = sess.run(pred, feed_dict)
+    msk = deeplab_resnet.utils.decode_labels(preds)
+    im = Image.fromarray(msk[0])
+    global i
+    i+=1
+    im.save('mask'+str(i)+'.png')
+
+
     pred = preds[0]
-    mask = pred[:, :, 0] != 15
+    mask = np.zeros_like(pred)
+    mask[pred[:, :, 0] != 15] = 1
+
     return mask
 
 
