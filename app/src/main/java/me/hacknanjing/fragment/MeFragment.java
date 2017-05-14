@@ -106,12 +106,14 @@ public class MeFragment extends BaseFragment implements AMap.OnMarkerClickListen
 
     @Override
     public boolean onMarkerClick(final Marker marker) {
+        Log.d("START DETAIL","2");
         Post post = (Post)marker.getObject();
         int index = mockPosts().indexOf(post);
         Intent intent = new Intent(getContext(), DetailActivity.class);
         intent.putExtra(EXTRA_POST_INDEX, index);
         intent.putExtra(EXTRA_IS_FRIENDS, false);
         startActivity(intent);
+        Toast.makeText(getContext(), "您点击了Marker", Toast.LENGTH_LONG).show();
         return true;
     }
 

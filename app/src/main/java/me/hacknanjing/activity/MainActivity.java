@@ -69,7 +69,7 @@ public class MainActivity extends BaseActivity {
         menu.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
         menu.setIcon(R.drawable.message);
         menu.setOnMenuItemClickListener((MenuItem menuItem) -> {
-            Intent intent = new Intent(this, MessageActivity.class);
+            Intent intent = new Intent(this, NoticeActivity.class);
             startActivity(intent);
             return false;
         });
