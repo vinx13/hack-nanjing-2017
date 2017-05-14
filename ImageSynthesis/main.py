@@ -9,6 +9,22 @@ import tf.inference
 sess, pred, data_pl = tf.inference.create_sesssion()
 
 
+def resize(img):
+    target_width = 800
+    if len(img[0]) > target_width:
+        scalar = float(len(img[0])) / len(img)
+        target_height = int(target_width / scalar)
+        return cv2.resize(img, (target_width, target_height), (0, 0), (0, 0), cv2.INTER_LINEAR)
+    else:
+        return img
+
+
+def rotate(img):
+    mat = cv2.transpose(img)
+    return cv2.flip(mat, 1);
+
+
+
 def get_transform_point(original_point, transform_matrix):
     original_point_list = numpy.array([[original_point[0]], [original_point[1]], [1.0]])
     target_point_list = transform_matrix * original_point_list
@@ -74,8 +90,17 @@ def draw_key_point(img1, img2, kp_pairs):
 def main():
     img1 = cv2.imread(config.UPLOAD_IMAGE_FOLDER + "/origin.png", cv2.IMREAD_COLOR)
     img2 = cv2.imread(config.UPLOAD_IMAGE_FOLDER + "/new.png", cv2.IMREAD_COLOR)
-    gray1 = cv2.cvtColor(img1, cv2.COLOR_BGR2GRAY);
-    gray2 = cv2.cvtColor(img2, cv2.COLOR_BGR2GRAY);
+
+    img1 = resize(img1)
+    img2 = resize(img2)
+
+    if len(img1) > len(img1[0]):
+        img1 = rotate(img1)
+    if len(img2) > len(img2[0]):
+        img2 = rotate(img2)
+
+    gray1 = cv2.cvtColor(img1, cv2.COLOR_BGR2GRAY)
+    gray2 = cv2.cvtColor(img2, cv2.COLOR_BGR2GRAY)
 
     sift = cv2.SIFT()
     kp1, des1 = sift.detectAndCompute(gray1, None)
@@ -111,9 +136,6 @@ def main():
 
     img1_input = img_trans.copy()
     img2_input = img2.copy()
-
-    # tf here  use img1_input & img2_input and give the mat only with people
-
 
     img1_tf_output = tf.inference.infer(sess, pred, img1_input, data_pl)
     img2_tf_output = tf.inference.infer(sess, pred, img2_input, data_pl)
