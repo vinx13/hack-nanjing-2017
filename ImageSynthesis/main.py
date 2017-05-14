@@ -14,7 +14,7 @@ def resize(img):
     if len(img[0]) > target_width:
         scalar = float(len(img[0])) / len(img)
         target_height = int(target_width / scalar)
-        return cv2.resize(img, (target_width, target_height), (0, 0), (0, 0), cv2.INTER_LINEAR)
+        return cv2.resize(img, (target_width, target_height), interpolation=cv2.INTER_AREA)
     else:
         return img
 
@@ -38,9 +38,7 @@ def get_overlap(img1, img2, i, j, k, rows, img1_tf_output, img2_tf_output):
     weight = 0.5 + abs(i - rows / 2.0) / rows
     if img1_tf_output[i][j] != 0:
         return img1[i][j][k]
-    elif img2_tf_output[i][j] != 0:
-        return img2[i][j][k]
-    elif img1[i][j][k] == 0:
+    if img1[i][j][k] == 0:
         return img2[i][j][k]
     elif img2[i][j][k] == 0:
         return img1[i][j][k]
