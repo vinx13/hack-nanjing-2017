@@ -10,4 +10,5 @@ DATABASE_DIR = os.path.join(BASE_DIR, 'database')
 DATABASE_PATH = os.path.join(DATABASE_DIR, 'app.db')
 DATABASE_SCHEMA_PATH = os.path.join(DATABASE_DIR, 'schema.sql')
 
+UPLOAD_IMAGE = '/Users/Vincent'
 UPLOAD_IMAGE_FOLDER = '/Users/Vincent/upload'

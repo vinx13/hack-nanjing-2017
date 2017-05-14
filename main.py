@@ -5,7 +5,7 @@
 # @Last Modified time: 2017-04-19 10:10:13
 
 from flask import Flask, request, jsonify, send_from_directory, abort
-from config import UPLOAD_IMAGE_FOLDER
+from config import UPLOAD_IMAGE_FOLDER, UPLOAD_IMAGE
 import time, os
 
 import ImageSynthesis
@@ -56,8 +56,8 @@ def uploadimage():
 
 @app.route("/getimage/<filename>", methods=['GET'])
 def getimage(filename):
-    if os.path.isfile(os.path.join(UPLOAD_IMAGE_FOLDER, filename)):
-        return send_from_directory(UPLOAD_IMAGE_FOLDER, filename, as_attachment=True)
+    if os.path.isfile(os.path.join(UPLOAD_IMAGE, filename)):
+        return send_from_directory(UPLOAD_IMAGE, filename, as_attachment=True)
     abort(404)
 
 
