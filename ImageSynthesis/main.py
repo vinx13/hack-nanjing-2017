@@ -179,7 +179,9 @@ def main():
             img1_overlap[i][j][2] = get_overlap(img1_roi_copy, img2_overlap, i, j, 2, rows, cols, img1_tf_output, img2_tf_output, col)
 
     img_trans = img_trans[0: len(img1_overlap), col: col + len(img1_overlap[0])]
-    cv2.imwrite("transResult.jpg", img_trans)
+    cv2.imwrite("transResult.png", img_trans)
+
+    return "transResult.png"
 
 
 if __name__ == '__main__':

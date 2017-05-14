@@ -48,8 +48,8 @@ def uploadimage():
     if file_new and file_origin:
         file_new.save(os.path.join(UPLOAD_IMAGE_FOLDER, file_new.filename))
         file_origin.save(os.path.join(UPLOAD_IMAGE_FOLDER, file_origin.filename))
-        ImageSynthesis.main.main()
-        return jsonify({"error": 0, "msg": "upload success"})
+        img_name = ImageSynthesis.main.main()
+        return jsonify({"url": "/getimage/"+img_name, "error": 0, "msg": "upload success"})
     else:
         return jsonify({"error": 1, "msg": "upload failure"})
 
