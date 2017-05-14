@@ -7,12 +7,12 @@
 from flask import Flask, request, jsonify, send_from_directory, abort
 from config import UPLOAD_IMAGE_FOLDER
 import time, os
-from tf import inference
+
 import ImageSynthesis
 
 
 app = Flask("HP")
-inference.create_sesssion()
+
 app.secret_key = "HackNanjing"
 
 

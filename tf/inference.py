@@ -10,6 +10,7 @@ from datetime import datetime
 import os
 import sys
 import time
+import numpy as np
 
 from PIL import Image
 
@@ -22,7 +23,7 @@ IMG_MEAN = np.array((104.00698793, 116.66876762, 122.67891434), dtype=np.float32
 
 NUM_CLASSES = 21
 SAVE_DIR = './'
-MODEL_WEIGHTS='/Users/Vincent/deeplab_resnet.ckpt'
+MODEL_WEIGHTS = '/Users/Vincent/deeplab_resnet.ckpt'
 INPUT_HEIGHT = 300
 INPUT_WEIGHT = 300
 
@@ -50,7 +51,7 @@ def create_sesssion():
 
     # Predictions.
     raw_output = net.layers['fc1_voc12']
-    #raw_output_up = tf.image.resize_bilinear(raw_output, tf.shape(img)[0:2, ])
+    # raw_output_up = tf.image.resize_bilinear(raw_output, tf.shape(img)[0:2, ])
     raw_output_up = tf.argmax(raw_output, dimension=3)
     pred = tf.expand_dims(raw_output_up, dim=3)
 
@@ -64,16 +65,17 @@ def create_sesssion():
     loader = tf.train.Saver(var_list=restore_var)
     load(loader, sess)
 
-    return (sess, data_pl)
+    return (sess, pred, data_pl)
 
-def infer(img, feed_dict):
+
+def infer(sess, pred, img, data_pl):
     # Convert RGB to BGR.
-    img_r, img_g, img_b = tf.split(axis=2, num_or_size_splits=3, value=img)
-    img = tf.cast(tf.concat(axis=2, values=[img_b, img_g, img_r]), dtype=tf.float32)
+    img_r, img_g, img_b = np.split(img, 3, axis=2)
+    img = np.concatenate((img_b, img_g, img_r), axis=2).astype(dtype=np.float32)
     # Extract mean.
     img -= IMG_MEAN
-    img = tf.expand_dims(img, dim=0)
-    #feed_dict = {data_pl: img}
+    img = np.expand_dims(img, axis=0)
+    feed_dict = {data_pl: img}
 
     # Perform inference.
     preds = sess.run(pred, feed_dict)

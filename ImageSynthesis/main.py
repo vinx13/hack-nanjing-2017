@@ -4,6 +4,10 @@
 
 import cv2, numpy
 import config
+import tf.inference
+
+sess, pred, data_pl = tf.inference.create_sesssion()
+
 
 def get_transform_point(original_point, transform_matrix):
     original_point_list = numpy.array([[original_point[0]], [original_point[1]], [1.0]])
@@ -15,7 +19,7 @@ def get_transform_point(original_point, transform_matrix):
 
 
 def get_overlap(img1, img2, i, j, k, rows):
-    weight = 0.5 + abs(i - rows/2.0) / rows
+    weight = 0.5 + abs(i - rows / 2.0) / rows
     if img1[i][j][k] == 0:
         return img2[i][j][k]
     elif img2[i][j][k] == 0:
@@ -25,7 +29,6 @@ def get_overlap(img1, img2, i, j, k, rows):
 
 
 def merge_img(img1, img2):
-
     if len(img1) > len(img2):
         smaller_img = img2
         bigger_img = img1
@@ -34,22 +37,22 @@ def merge_img(img1, img2):
         bigger_img = img2
     height = len(bigger_img)
     width = len(smaller_img[0])
-    new_img = numpy.ones((height, width, 3))*255
+    new_img = numpy.ones((height, width, 3)) * 255
     if len(smaller_img) % 2 == 0:
-        new_img[height/2 - len(smaller_img)/2: height/2 + len(smaller_img)/2, :, :] = smaller_img
+        new_img[height / 2 - len(smaller_img) / 2: height / 2 + len(smaller_img) / 2, :, :] = smaller_img
     else:
-        new_img[height/2 - len(smaller_img)/2: height/2 + len(smaller_img)/2+1, :, :] = smaller_img
+        new_img[height / 2 - len(smaller_img) / 2: height / 2 + len(smaller_img) / 2 + 1, :, :] = smaller_img
 
     if len(img1) > len(img2):
         img = numpy.hstack((bigger_img, new_img))
         first_img_start_x = 0
         first_img_start_y = 0
         second_img_start_x = len(bigger_img[0])
-        second_img_start_y = height/2 - len(smaller_img)/2
+        second_img_start_y = height / 2 - len(smaller_img) / 2
     else:
         img = numpy.hstack((new_img, bigger_img))
         first_img_start_x = 0
-        first_img_start_y = height/2 - len(smaller_img)/2
+        first_img_start_y = height / 2 - len(smaller_img) / 2
         second_img_start_x = width
         second_img_start_y = 0
 
@@ -69,8 +72,8 @@ def draw_key_point(img1, img2, kp_pairs):
 
 
 def main():
-    img1 = cv2.imread(config.UPLOAD_IMAGE_FOLDER+"/origin.png", cv2.IMREAD_COLOR)
-    img2 = cv2.imread(config.UPLOAD_IMAGE_FOLDER+"/Users/Vincent/upload/new.png", cv2.IMREAD_COLOR)
+    img1 = cv2.imread(config.UPLOAD_IMAGE_FOLDER + "/origin.png", cv2.IMREAD_COLOR)
+    img2 = cv2.imread(config.UPLOAD_IMAGE_FOLDER + "/new.png", cv2.IMREAD_COLOR)
     gray1 = cv2.cvtColor(img1, cv2.COLOR_BGR2GRAY);
     gray2 = cv2.cvtColor(img2, cv2.COLOR_BGR2GRAY);
 
@@ -84,7 +87,7 @@ def main():
     good = []
     for m, n in matches:
         if m.distance < 0.75 * n.distance:
-            good.append((m, m.distance/n.distance))
+            good.append((m, m.distance / n.distance))
 
     good_sorted = sorted(good, key=lambda x: x[1])
     good = [x[0] for x in good_sorted]
@@ -111,8 +114,9 @@ def main():
 
     # tf here  use img1_input & img2_input and give the mat only with people
 
-    img1_tf_output =  None# TODO:
-    img2_tf_output =  None# TODO:
+
+    img1_tf_output = tf.inference.infer(sess, pred, img1_input, data_pl)
+    img2_tf_output = tf.inference.infer(sess, pred, img2_input, data_pl)
 
     col = int(target_link_point[0] - based_image_point[0])
     img1_overlap = img_trans[0: len(img2), col:]
@@ -138,12 +142,12 @@ def main():
                     img_trans[i][j][k] = img1_tf_output[i][j][k]
 
     for i in range(len(img2)):
-        for j in range(col, col+len(img2_overlap)):
+        for j in range(col, col + len(img2_overlap)):
             for k in range(3):
                 if img2_tf_output[i][j][k] != 0:
                     img_trans[i][j][k] = img2_tf_output[i][j][k]
 
-    img_trans = img_trans[0: len(img1_overlap), col: col+len(img1_overlap[0])]
+    img_trans = img_trans[0: len(img1_overlap), col: col + len(img1_overlap[0])]
     cv2.imwrite("transResult.jpg", img_trans)
 
 
