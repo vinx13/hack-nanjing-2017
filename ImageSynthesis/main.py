@@ -151,8 +151,8 @@ def main():
     img1_tf_output = tf.inference.infer(sess, pred, img1_input, data_pl)
     img2_tf_output = tf.inference.infer(sess, pred, img2_input, data_pl)
 
-    #img1_tf_output = (1 - numpy.load("tf1.npy")) * 255.0
-    #img2_tf_output = (1 - numpy.load("tf2.npy")) * 255.0
+    img1_tf_output = (1 - img1_tf_output) * 255.0
+    img2_tf_output = (1 - img2_tf_output) * 255.0
 
     img1_tf_output = cv2.GaussianBlur(img1_tf_output, (15, 15), 0)
     img2_tf_output = cv2.GaussianBlur(img2_tf_output, (15, 15), 0)
