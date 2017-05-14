@@ -92,6 +92,8 @@ def draw_key_point(img1, img2, kp_pairs):
 def main():
     img1 = cv2.imread(config.UPLOAD_IMAGE_FOLDER + "/origin.png", cv2.IMREAD_COLOR)
     img2 = cv2.imread(config.UPLOAD_IMAGE_FOLDER + "/new.png", cv2.IMREAD_COLOR)
+    #img1 = cv2.imread("1.jpg", cv2.IMREAD_COLOR)
+    #img2 = cv2.imread("2.jpg", cv2.IMREAD_COLOR)
 
     if len(img1) > len(img1[0]):
         img1 = rotate(img1)
@@ -119,7 +121,7 @@ def main():
     good_sorted = sorted(good, key=lambda x: x[1])
     good = [x[0] for x in good_sorted]
     kp_pairs = []
-    for i in range(40):
+    for i in range(min(40, len(good))):
         kp_pairs.append([kp1[good[i].queryIdx].pt, kp2[good[i].trainIdx].pt])
 
     img = draw_key_point(img1, img2, kp_pairs)
