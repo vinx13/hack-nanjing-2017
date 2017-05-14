@@ -118,6 +118,7 @@ public class MeFragment extends BaseFragment implements AMap.OnMarkerClickListen
     public void initMap(){
         if (aMap == null) {
             aMap = mapView.getMap();
+            aMap.setOnMarkerClickListener(this);
             addMarkersToMap();
             changeCamera(
                     CameraUpdateFactory.newCameraPosition(new CameraPosition(

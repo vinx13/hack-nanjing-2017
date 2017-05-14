@@ -43,7 +43,6 @@ public class FriendsFragment extends BaseFragment {
         View view = inflater.inflate(R.layout.fragment_friends, container, false);
         ButterKnife.bind(this, view);
 
-
         List<Post> posts = mockPosts();
         rvList.setHasFixedSize(true);
         rvList.setLayoutManager(new LinearLayoutManager(getContext()));

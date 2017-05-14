@@ -62,6 +62,12 @@ public class CardAdapter extends RecyclerView.Adapter {
                 intent.putExtra(DetailActivity.EXTRA_POST_INDEX, index);
                 context.startActivity(intent);
             });
+            if(isFriends) {
+                ivAvatar.setOnClickListener(v->{
+                    Intent intent = new Intent(context, FriendPostsActivity.class);
+                    context.startActivity(intent);
+                });
+            }
         }
 
         void updateLike(Post post, Context context) {
