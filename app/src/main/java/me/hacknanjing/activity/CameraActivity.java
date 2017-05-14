@@ -95,44 +95,38 @@ public class CameraActivity extends BaseActivity implements SurfaceHolder.Callba
                 options.inSampleSize = 5;
                 BitmapFactory.decodeByteArray(data, 0, data.length, options);
 
-                Bitmap bitmap = BitmapFactory.decodeByteArray(data, 0, data.length, options);
                 try {
-                    String filename = getCacheDir() + "/image.png";
-                    File file = new File(filename);
-                    FileOutputStream stream = new FileOutputStream(file);
-                    bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
-                    stream.close();
+                    if (extra_bg >= 0) {
+                        Bitmap bitmap = BitmapFactory.decodeByteArray(data, 0, data.length, options);
 
-                    OkHttpClient client = new OkHttpClient.Builder().build();
-                    MediaType mediaType = MediaType.parse("image/png");
+                        Bitmap origin = BitmapFactory.decodeResource(getResources(), extra_bg);
+                        MultipartBody.Builder formBody = new MultipartBody.Builder()
+                                .setType(MultipartBody.FORM);
+                        upload(bitmap, "new", formBody);
+                        upload(origin, "origin",formBody);
+                        Request request =
+                                new Request.Builder()
+                                        .url("http://192.168.2.124:8080/uploadimage")
+                                        .post(formBody.build())
+                                        .build();
+                        OkHttpClient client=  new OkHttpClient.Builder().build();
+                        Call call = client.newCall(request);
 
-                    RequestBody fileBody = RequestBody.create(mediaType, file);
+                        call.enqueue(new Callback() {
+                            @Override
+                            public void onFailure(Call call, IOException e) {
 
-                    RequestBody formBody = new MultipartBody.Builder()
-                            .setType(MultipartBody.FORM)
-                            .addFormDataPart("file", file.getName(), fileBody)
-                            .build();
-                    Request request =
-                            new Request.Builder()
-                                    .url("http://192.168.2.61:8080/uploadimage")
-                                    .post(formBody)
-                                    .build();
-                    Call call = client.newCall(request);
+                                Log.e("error response", e.getMessage());
+                                e.printStackTrace();
+                            }
 
-                    call.enqueue(new Callback() {
-                        @Override
-                        public void onFailure(Call call, IOException e) {
-
-                            Log.e("error response",e.getMessage());
-                            e.printStackTrace();
-                        }
-
-                        @Override
-                        public void onResponse(Call call, Response response) throws IOException {
-                            String json = response.body().string();
-                            Log.d("response", json);
-                        }
-                    });
+                            @Override
+                            public void onResponse(Call call, Response response) throws IOException {
+                                String json = response.body().string();
+                                Log.d("response", json);
+                            }
+                        });
+                    }
 
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -141,6 +135,24 @@ public class CameraActivity extends BaseActivity implements SurfaceHolder.Callba
                 }
             });
         });
+    }
+
+    private void upload(Bitmap bitmap, String filename, MultipartBody.Builder formBody) throws IOException {
+        String fullname = getCacheDir() + "/" + filename + ".png";
+        File file = new File(fullname);
+        FileOutputStream stream = new FileOutputStream(file);
+        bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
+        stream.close();
+
+        OkHttpClient client = new OkHttpClient.Builder().build();
+        MediaType mediaType = MediaType.parse("image/png");
+
+        RequestBody fileBody = RequestBody.create(mediaType, file);
+
+        formBody
+                .addFormDataPart(filename, file.getName(), fileBody)
+                .build();
+
     }
 
     @Override
