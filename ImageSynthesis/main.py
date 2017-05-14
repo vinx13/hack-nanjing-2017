@@ -34,9 +34,13 @@ def get_transform_point(original_point, transform_matrix):
     return x, y
 
 
-def get_overlap(img1, img2, i, j, k, rows):
+def get_overlap(img1, img2, i, j, k, rows, img1_tf_output, img2_tf_output):
     weight = 0.5 + abs(i - rows / 2.0) / rows
-    if img1[i][j][k] == 0:
+    if img1_tf_output[i][j] != 0:
+        return img1[i][j][k]
+    elif img2_tf_output[i][j] != 0:
+        return img2[i][j][k]
+    elif img1[i][j][k] == 0:
         return img2[i][j][k]
     elif img2[i][j][k] == 0:
         return img1[i][j][k]
@@ -153,11 +157,11 @@ def main():
     rows = len(img2_overlap)
     for i in range(len(img1_overlap)):
         for j in range(len(img1_overlap[0])):
-            img1_overlap[i][j][0] = get_overlap(img1_roi_copy, img2_overlap, i, j, 0, rows)
-            img1_overlap[i][j][1] = get_overlap(img1_roi_copy, img2_overlap, i, j, 1, rows)
-            img1_overlap[i][j][2] = get_overlap(img1_roi_copy, img2_overlap, i, j, 2, rows)
+            img1_overlap[i][j][0] = get_overlap(img1_roi_copy, img2_overlap, i, j, 0, rows, img1_tf_output, img2_tf_output)
+            img1_overlap[i][j][1] = get_overlap(img1_roi_copy, img2_overlap, i, j, 1, rows, img1_tf_output, img2_tf_output)
+            img1_overlap[i][j][2] = get_overlap(img1_roi_copy, img2_overlap, i, j, 2, rows, img1_tf_output, img2_tf_output)
 
-    for i in range(len(img_trans)):
+    '''for i in range(len(img_trans)):
         for j in range(len(img_trans[0])):
             for k in range(3):
                 if img1_tf_output[i][j][k] != 0:
@@ -167,7 +171,7 @@ def main():
         for j in range(col, col + len(img2_overlap)):
             for k in range(3):
                 if img2_tf_output[i][j][k] != 0:
-                    img_trans[i][j][k] = img2_tf_output[i][j][k]
+                    img_trans[i][j][k] = img2_tf_output[i][j][k]'''
 
     img_trans = img_trans[0: len(img1_overlap), col: col + len(img1_overlap[0])]
     cv2.imwrite("transResult.jpg", img_trans)
