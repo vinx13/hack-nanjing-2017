@@ -34,11 +34,17 @@ def get_transform_point(original_point, transform_matrix):
     return x, y
 
 
-def get_overlap(img1, img2, i, j, k, rows, img1_tf_output, img2_tf_output):
-    weight = 0.5 + abs(i - rows / 2.0) / rows
-    if img1_tf_output[i][j] != 0:
-        return img1[i][j][k]
-    if img1[i][j][k] == 0:
+def get_overlap(img1, img2, i, j, k, rows, cols, img1_tf_output, img2_tf_output, col):
+    weight1 = 0.5 + abs(i - rows / 2.0) / rows
+    weight2 = 0.5 + abs(j - cols / 2.0) / cols
+    weight = (weight1 + weight2) / 2
+    if img1_tf_output[i][j+col] != 0:
+        weight = 0.5 + (img1_tf_output[i][j+col] / 255.0) / 2
+        return weight * img1[i][j][k] + (1 - weight) * img2[i][j][k]
+    elif img2_tf_output[i][j] != 0:
+        weight = 0.5 + (img2_tf_output[i][j] / 255.0) / 2
+        return (1 - weight) * img1[i][j][k] + weight * img2[i][j][k]
+    elif img1[i][j][k] == 0:
         return img2[i][j][k]
     elif img2[i][j][k] == 0:
         return img1[i][j][k]
@@ -92,8 +98,8 @@ def draw_key_point(img1, img2, kp_pairs):
 def main():
     img1 = cv2.imread(config.UPLOAD_IMAGE_FOLDER + "/origin.png", cv2.IMREAD_COLOR)
     img2 = cv2.imread(config.UPLOAD_IMAGE_FOLDER + "/new.png", cv2.IMREAD_COLOR)
-    #img1 = cv2.imread("1.jpg", cv2.IMREAD_COLOR)
-    #img2 = cv2.imread("2.jpg", cv2.IMREAD_COLOR)
+    #img1 = cv2.imread("1.png", cv2.IMREAD_COLOR)
+    #img2 = cv2.imread("2.png", cv2.IMREAD_COLOR)
 
     if len(img1) > len(img1[0]):
         img1 = rotate(img1)
@@ -137,6 +143,7 @@ def main():
     based_image_point = kp2[0]
 
     img_trans = cv2.warpPerspective(img1, adjust_homo, (len(img1[0]) + len(img2[0]) + 110, len(img2)))
+    cv2.imwrite("trans.jpg", img_trans)
 
     img1_input = img_trans.copy()
     img2_input = img2.copy()
@@ -144,37 +151,32 @@ def main():
     img1_tf_output = tf.inference.infer(sess, pred, img1_input, data_pl)
     img2_tf_output = tf.inference.infer(sess, pred, img2_input, data_pl)
 
-    img1_tf_output = cv2.resize(img, (len(img1_tf_output[0]), len(img1_tf_output)), interpolation=cv2.INTER_AREA)
-    img2_tf_output = cv2.resize(img, (len(img2_tf_output[0]), len(img2_tf_output)), interpolation=cv2.INTER_AREA)
+    #img1_tf_output = (1 - numpy.load("tf1.npy")) * 255.0
+    #img2_tf_output = (1 - numpy.load("tf2.npy")) * 255.0
+
+    img1_tf_output = cv2.GaussianBlur(img1_tf_output, (15, 15), 0)
+    img2_tf_output = cv2.GaussianBlur(img2_tf_output, (15, 15), 0)
+
+    #cv2.imwrite("img1_tf_output.jpg", img1_tf_output)
+    #cv2.imwrite("img2_tf_output.jpg", img2_tf_output)
 
     col = int(target_link_point[0] - based_image_point[0])
     img1_overlap = img_trans[0: len(img2), col:]
     img2_overlap = img2[0: len(img1_overlap), 0: len(img1_overlap[0])]
-    cv2.imwrite("img1_overlap.jpg", img1_overlap)
-    cv2.imwrite("img2_overlap.jpg", img2_overlap)
+    #cv2.imwrite("img1_overlap.jpg", img1_overlap)
+    #cv2.imwrite("img2_overlap.jpg", img2_overlap)
 
     if len(img1_overlap[0]) > len(img2_overlap[0]):
         img1_overlap = img1_overlap[0: len(img2), 0: len(img2_overlap[0])]
     img1_roi_copy = img1_overlap.copy()
 
     rows = len(img2_overlap)
+    cols = len(img2_overlap[0])
     for i in range(len(img1_overlap)):
         for j in range(len(img1_overlap[0])):
-            img1_overlap[i][j][0] = get_overlap(img1_roi_copy, img2_overlap, i, j, 0, rows, img1_tf_output, img2_tf_output)
-            img1_overlap[i][j][1] = get_overlap(img1_roi_copy, img2_overlap, i, j, 1, rows, img1_tf_output, img2_tf_output)
-            img1_overlap[i][j][2] = get_overlap(img1_roi_copy, img2_overlap, i, j, 2, rows, img1_tf_output, img2_tf_output)
-
-    '''for i in range(len(img_trans)):
-        for j in range(len(img_trans[0])):
-            for k in range(3):
-                if img1_tf_output[i][j][k] != 0:
-                    img_trans[i][j][k] = img1_tf_output[i][j][k]
-
-    for i in range(len(img2)):
-        for j in range(col, col + len(img2_overlap)):
-            for k in range(3):
-                if img2_tf_output[i][j][k] != 0:
-                    img_trans[i][j][k] = img2_tf_output[i][j][k]'''
+            img1_overlap[i][j][0] = get_overlap(img1_roi_copy, img2_overlap, i, j, 0, rows, cols, img1_tf_output, img2_tf_output, col)
+            img1_overlap[i][j][1] = get_overlap(img1_roi_copy, img2_overlap, i, j, 1, rows, cols, img1_tf_output, img2_tf_output, col)
+            img1_overlap[i][j][2] = get_overlap(img1_roi_copy, img2_overlap, i, j, 2, rows, cols, img1_tf_output, img2_tf_output, col)
 
     img_trans = img_trans[0: len(img1_overlap), col: col + len(img1_overlap[0])]
     cv2.imwrite("transResult.jpg", img_trans)
