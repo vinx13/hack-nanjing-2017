@@ -144,6 +144,9 @@ def main():
     img1_tf_output = tf.inference.infer(sess, pred, img1_input, data_pl)
     img2_tf_output = tf.inference.infer(sess, pred, img2_input, data_pl)
 
+    img1_tf_output = cv2.resize(img, (len(img1_tf_output[0]), len(img1_tf_output)), interpolation=cv2.INTER_AREA)
+    img2_tf_output = cv2.resize(img, (len(img2_tf_output[0]), len(img2_tf_output)), interpolation=cv2.INTER_AREA)
+
     col = int(target_link_point[0] - based_image_point[0])
     img1_overlap = img_trans[0: len(img2), col:]
     img2_overlap = img2[0: len(img1_overlap), 0: len(img1_overlap[0])]
