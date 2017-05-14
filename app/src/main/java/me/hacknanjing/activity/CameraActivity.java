@@ -91,43 +91,18 @@ public class CameraActivity extends BaseActivity implements SurfaceHolder.Callba
         ivCamera.setOnClickListener(v -> {
             camera.takePicture(null, null, (data, camera1) -> {
                 BitmapFactory.Options options = new BitmapFactory.Options();
-                options.outHeight = 640;
                 options.inSampleSize = 5;
                 BitmapFactory.decodeByteArray(data, 0, data.length, options);
 
+                if (extra_bg < 0) {
+                    finish();
+                }
+                Bitmap bitmap = BitmapFactory.decodeByteArray(data, 0, data.length, options);
+                Bitmap origin = BitmapFactory.decodeResource(getResources(), extra_bg);
+
+
                 try {
-                    if (extra_bg >= 0) {
-                        Bitmap bitmap = BitmapFactory.decodeByteArray(data, 0, data.length, options);
-
-                        Bitmap origin = BitmapFactory.decodeResource(getResources(), extra_bg);
-                        MultipartBody.Builder formBody = new MultipartBody.Builder()
-                                .setType(MultipartBody.FORM);
-                        upload(bitmap, "new", formBody);
-                        upload(origin, "origin",formBody);
-                        Request request =
-                                new Request.Builder()
-                                        .url("http://192.168.2.124:8080/uploadimage")
-                                        .post(formBody.build())
-                                        .build();
-                        OkHttpClient client=  new OkHttpClient.Builder().build();
-                        Call call = client.newCall(request);
-
-                        call.enqueue(new Callback() {
-                            @Override
-                            public void onFailure(Call call, IOException e) {
-
-                                Log.e("error response", e.getMessage());
-                                e.printStackTrace();
-                            }
-
-                            @Override
-                            public void onResponse(Call call, Response response) throws IOException {
-                                String json = response.body().string();
-                                Log.d("response", json);
-                            }
-                        });
-                    }
-
+                    save(bitmap, origin);
                 } catch (IOException e) {
                     e.printStackTrace();
                 } finally {
@@ -137,6 +112,49 @@ public class CameraActivity extends BaseActivity implements SurfaceHolder.Callba
         });
     }
 
+    private void save(Bitmap bitmap, Bitmap origin) throws IOException {
+        MultipartBody.Builder formBody = new MultipartBody.Builder()
+                .setType(MultipartBody.FORM);
+
+        int width = origin.getWidth();
+        if (width > 500)
+            width = 500;
+
+        origin = scaleAlongWidth(origin, width);
+        bitmap =scaleAlongWidth(bitmap, width);
+        int height = origin.getHeight();
+
+        upload(bitmap, "new", formBody);
+        upload(origin, "origin", formBody);
+        Request request =
+                new Request.Builder()
+                        .url("http://192.168.2.124:8080/uploadimage")
+                        .post(formBody.build())
+                        .build();
+        OkHttpClient client = new OkHttpClient.Builder().build();
+        Call call = client.newCall(request);
+
+        call.enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+
+                Log.e("error response", e.getMessage());
+                e.printStackTrace();
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                String json = response.body().string();
+                Log.d("response", json);
+            }
+        });
+    }
+
+    private Bitmap scaleAlongWidth(Bitmap bitmap, int width) {
+        double ratio = bitmap.getHeight() * 1.0 / bitmap.getWidth();
+        return Bitmap.createScaledBitmap(bitmap, width, (int)(width*ratio), false);
+    }
+
     private void upload(Bitmap bitmap, String filename, MultipartBody.Builder formBody) throws IOException {
         String fullname = getCacheDir() + "/" + filename + ".png";
         File file = new File(fullname);
@@ -144,7 +162,6 @@ public class CameraActivity extends BaseActivity implements SurfaceHolder.Callba
         bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
         stream.close();
 
-        OkHttpClient client = new OkHttpClient.Builder().build();
         MediaType mediaType = MediaType.parse("image/png");
 
         RequestBody fileBody = RequestBody.create(mediaType, file);

@@ -52,6 +52,7 @@ public class Factory {
         posts.add(new Post(randomUser(), R.drawable.p7, "海边 等一个人和我牵手", new LatLng(31.985099, 118.672703)));
         posts.add(new Post(randomUser(), R.drawable.p2, "Quebec！", new LatLng(32.054379, 118.842647)));
 
+        friendPosts.add(new Post(randomUser(),R.drawable.fp10,"Hack Nanjing！", new LatLng(32.054379, 118.842647)));
         friendPosts.add(new Post(randomUser(), R.drawable.fp1, "南山南 北海北 南山有墓碑", new LatLng(32.174766, 119.433527)));
         friendPosts.add(new Post(randomUser(), R.drawable.fp2, "女人出门果然就是自拍 预祝白白参加中国新歌声成功", new LatLng(32.087097, 118.778995)));
         friendPosts.add(new Post(randomUser(), R.drawable.fp3, "斯里兰卡", new LatLng(31.912853, 118.771601)));
